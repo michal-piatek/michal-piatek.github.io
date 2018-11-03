@@ -67,7 +67,7 @@ An anecdote to illustrate the point:
 
 | **Donald Knuth** | **Doug McIlroy** |
 |:---|:---|
-|10-page literal Pascal program, <br/> including innovative new data structures|tr -cs A-Za-z '\n' \|<br/> tr A-Z a-z \|<br>sort \|<br> uniq -c \| sort -r -n \| sed ${1}q|
+|10-page literal Pascal program, <br/> including innovative new data structures|tr -cs A-Za-z '\n' \|<br/>tr A-Z a-z \|<br>sort \|<br>uniq -c \|<br>sort -r -n \|<br>sed ${1}q|
 
 {:start="4"}
 4. **Unhealthy Complexity Attraction**

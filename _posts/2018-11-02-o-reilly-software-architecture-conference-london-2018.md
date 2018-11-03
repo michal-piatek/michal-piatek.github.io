@@ -24,7 +24,8 @@ In this blog I will summarise the learning and will add opinions of my own at th
 Stefan Tilkov described 10 diseases of software architecture
 
 1. **Over-generalization drive**
-  Symptom - Seeing commonalities in everything and turning them into generic solutions.
+
+Symptom: *Seeing commonalities in everything and turning them into generic solutions*
 
 Stefan told a funny anecdote about stages of architect career:
 
@@ -50,22 +51,50 @@ Answer: *it depends*
 
 {:start="2"}
 2. **Domain Allergy**
-Symptom: Treating the domain as a negligible nuisance 
+
+Symptom: *Treating the domain as a negligible nuisance* 
+
+![Domain allergy, generics](/assets/images/SAC2018/domain_allergy_generic.png)
 
 {:start="3"}
-3.
+3. **Obsessive Specialization Disorder**
+
+Symptom: *Believing evry problem to be unique, even if it's been solved 1,000 times*
+
+An anecdote to illustrate the point:
+
+**Task**: Read a file of text, determinethe *n* most frequently used words, and point out a sorted list of those words along with their frequencies
+
+| **Donald Knuth** | **Doug McIlroy** |
+|:---|:---|
+|10-page literal Pascal program, <br/> including innovative new data structures|tr -cs A-Za-z '\n' \|<br/> tr A-Z a-z \|<br>sort \|<br> uniq -c \| sort -r -n \| sed ${1}q|
 
 {:start="4"}
-4.
+4. **Unhealthy Complexity Attraction**
+
+Symptom: *Being so smart you can't be bothered  by simple approaches*
 
 {:start="5"}
-5.
+5. **Analysis Paralysis**
+
+Symptom: *Taking longer to evaluate than to actually do it*
+![Vendor selection](/assets/images/SAC2018/vendor_selection.png)
 
 {:start="6"}
-6.
+6. **Innovation Addiction**
+
+Symptom: *Things become progressively less fun the closer you get to production*
+
+Symptom: *Using fashionable technology because it's popular (a.k.a. conference driven architecture)*
+
+Finished with a quote from [Dan McKinley](http://mcfunley.com/choose-boring-technology)
+
+> "Mindful choice of technology gives engineering minds real freedom: the freedom to contemplate bigger questions. Technology for its own sake is snake oil."
+
+and described idea of innovation tokens. Innovation tokens are limited in a given time period (e.g. 3 innovation token in a year time). You can spend innovation token to change your DB engin as an example. You cannot have all the innovations you want so you have to spend the innovation tokens wisely.
 
 {:start="7"}
-7.
+7. **Severe Tunneling Fixation**
 
 {:start="8"}
 8.

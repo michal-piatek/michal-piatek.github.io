@@ -19,6 +19,63 @@ Software architecture is an interesting and broad subject. It is a backbone of t
 
 In this blog I will summarise the learning and will add opinions of my own at the end. Slides and keynotes videos can be found [here](https://conferences.oreilly.com/software-architecture/sa-eu/public/schedule/proceedings).
 
+## Why software architects fail (and what to do about it)
+
+Stefan Tilkov described 10 diseases of software architecture
+
+1. **Over-generalization drive**
+  Symptom - Seeing commonalities in everything and turning them into generic solutions.
+
+Stefan told a funny anecdote about stages of architect career:
+
+(1) **The Enthusiastic Developer** - "This stuff is cool - let's build programs! For real people!"
+
+(2) **The Disilusioned Developer** - "Oh. Real people have boring problems." 
+
+(3) **The Enthusiastic Architect** - "Generic solutions! Cool!" 
+
+(4). **The Disillusioned Architect**  - KISS, YAGNI, Lean, Minimal Viable Product, Story focus
+
+Followed by quote from [Joel Spolsky](https://www.joelonsoftware.com/2001/04/21/dont-let-architecture-astronauts-scare-you/):
+
+> When you go too far up, abstraction-wise, you run out of oxygen. Sometimes smart thinkers just don’t know when to stop, and they create these absurd, all-encompassing, high-level pictures of the universe that are all good and fine, but don’t actually mean anything at all.
+>
+> These are the people I call Architecture Astronauts.
+
+(5) **The "Wise" Architect**
+
+Quesion: *\** (any question)
+
+Answer: *it depends*
+
+{:start="2"}
+2. **Domain Allergy**
+Symptom: Treating the domain as a negligible nuisance 
+
+{:start="3"}
+3.
+
+{:start="4"}
+4.
+
+{:start="5"}
+5.
+
+{:start="6"}
+6.
+
+{:start="7"}
+7.
+
+{:start="8"}
+8.
+
+{:start="9"}
+9.
+
+{:start="10"}
+10.
+
 ## Microservices
 
 ### Anti-patterns
@@ -113,7 +170,6 @@ More on the microservices can be found in newly published book by Chris "Microse
 
 ## Event-driven architecture
 
-## Why architects fail
 
 
 

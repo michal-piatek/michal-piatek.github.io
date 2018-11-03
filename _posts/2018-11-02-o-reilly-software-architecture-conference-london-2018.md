@@ -21,7 +21,7 @@ In this blog I will summarise the learning and will add opinions of my own at th
 
 ## Why software architects fail (and what to do about it)
 
-Stefan Tilkov described 10 diseases of software architecture
+Stefan Tilkov described 10 diseases of a software architect.
 
 1. **Over-generalization drive**
 
@@ -96,14 +96,73 @@ and described idea of innovation tokens. Innovation tokens are limited in a give
 {:start="7"}
 7. **Severe Tunneling Fixation**
 
+Symptom: *Enforcing an architectural approach that clashes with the framework, libraries or tools you use* 
+
 {:start="8"}
-8.
+8. **Asset Addiction**
+
+Symptom: *Becoming so attached to a particular tool/library/framework it becomes a fit for every problem*
 
 {:start="9"}
-9.
+9. **Exaggerated Risk Aversion**
+
+Symptom: *Sticking with horrible, horrible, HORRIBLE tools because they're there*
+
+Symptom: *Confusing "easy" with simple, creating additional complexity*
+
+Distinction of the following attributes of architectural decisions can by found on Rich Hickey talk ["Simple Made Easy"](https://www.infoq.com/presentations/Simple-Made-Easy). 
+
+|simple|easy|
+|hard|complex|
+
+On a high level simple is the opposite of hard and easy is the opposite of complex.
 
 {:start="10"}
-10.
+10. **Impact Dissonance**
+
+Symptom: *Becoming too detached from the actual system that is being delivered* 
+
+As a result architecture becomes a thing of its own and in mind of few becomes more important than the appliocation itself, which is clearly wrong.
+
+Symptom: *Believing everything has to be approved by you to ensure it meets the architecture standards*
+
+Beware the megalomania syndrome!
+
+#### The architect
+
+**What architects want to do?**
+- Shape strategy (30%)
+- Make important decisions (30%)
+- Explore technologies (20%)
+- Mentor developers (20%)
+
+**What others think the architects do**
+- Define annoying rules (40%)
+- Slow down development (20%)
+- Pick the wrong tools (20%)
+- Refuse to learn from devs (20%)
+
+**What developers *actually* do**
+- Try to be involved (35%)
+- Act as sales people (30%)
+- Defend architecture (30%)
+- Do technical stuff (5%)
+
+
+#### How to cure the above diseases?
+
+Stefan defined a very broad (and not to be taken literally) success formula.
+
+**An Architect's Success Formula**
+|Dogma and rules|10%|
+|Experience|20%|
+|Pragmatic|20%|
+|Flexibility|10%|
+|Minimalism|10%|
+|Trends and Future needs|10%|
+|Experiment & PoCs|10%|
+|Hands-on participation|10%|
+|Vendor advice|0%|
 
 ## Microservices
 

@@ -154,6 +154,7 @@ Beware the megalomania syndrome!
 Stefan defined a very broad (and not to be taken literally) success formula.
 
 **An Architect's Success Formula**
+
 |Dogma and rules|10%|
 |Experience|20%|
 |Pragmatic|20%|

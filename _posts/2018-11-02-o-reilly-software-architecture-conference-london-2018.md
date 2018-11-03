@@ -103,7 +103,7 @@ In this blog I will summarise the learning and will add opinions of my own at th
   - ...
 
   The following approach should be taken to mitigate:
-  ![Improve processes, organization and architecture](/assets/images/SAC2018/improve_processes.png)
+  ![Improve processes, organization and architecture](/assets/images/SAC2018/improve_processes_and_organization.png)
 
   ![Introduce microservices incrementally](/assets/images/SAC2018/microservices_incrementally.png)
 

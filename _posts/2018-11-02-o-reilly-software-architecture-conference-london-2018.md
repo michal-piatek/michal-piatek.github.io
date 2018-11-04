@@ -17,7 +17,7 @@ Software architecture is an interesting and broad subject. It is a backbone of t
 
 <!--more-->
 
-In this blog I will summarise the learning and will add opinions of my own at the end. Slides and keynotes videos can be found [here](https://conferences.oreilly.com/software-architecture/sa-eu/public/schedule/proceedings).
+In this blog I will summarise the learning and will add opinions of my own. Slides and keynotes videos can be found [here](https://conferences.oreilly.com/software-architecture/sa-eu/public/schedule/proceedings).
 
 ## Why software architects fail (and what to do about it)
 
@@ -346,8 +346,222 @@ When we think about compute (FaaS) in serverless:
 - Function groups should not share Data stores - each fucntion group should have a single BaaS backing it up
 - When doing schema changes a deployment of an entire function group may be needed
 
-## Event-driven architecture
+### Applying the principles of chaos to serverless
+Yan Cui started of with a defition of chaos engineering (from [http://principlesofchaos.org/](http://principlesofchaos.org/)):
+
+> Chaos Engineering is the discipline of experimenting on a distributed system in order to build confidence in the system’s capability to withstand turbulent conditions in production.
+
+and did a parallel to vaccination - *Chaos Engineering is the vaccine to frailties in modern software*. In that context Chaos Engineering:
+- Uses controlled experiments to inject failures into our system
+- Helps us learn about our system's behaviour and uncover unknown failure modes, before they manifest like wildfire in production
+- Lets us build confidence in systems stability to withstand turbulent conditions
+
+Chaos engineering is not about breaking things it is about learning about the system and building confidence.
+
+There are four steps to run a chaos experiment:
+1. Define "steady state" - what does normal, working condition look like (we don't want to run chaos experiment on system that's not healthy)
+2. Hypothesise steady state will continue in both control group & the experiment group - you should have a reasonable degree of confidence the system would handle the failure before you proceed with the experiment
+3. Inject realistic failures - e.g. server crashes, network error, HD malfunction, etc
+4. Disprove hypothesis - i.e. look for difference in steady state
+
+Chaos experiment in practice:
+- Explore unknown unknows away from production
+- Experiments that graduate to production should be carefully considered and planned
+- You should have reasonable confidence in the system before running experiments in production
+- Treat production with care it deserves
+- The goal is not to break things
+- If you know the system would break and you did it anyway, then it's not chaos experiment! - it's called being irresponsible
+- Look for evidence that steady state was impacted by the injected failure
+- Address weaknesses before failures happen for real
+- Experiments need to be controlled
+
+Containment:
+- Ensure everyone knows what you are doing
+- Don't surprise your teammates
+- Run experiments during office hours
+- Avoid important dates (e.g. new season of "Game of Thrones" on Netflix)
+- Make the smallest change necessary to prove or displrove hypothesis
+- Have a rollback plan
+- Stop the experiment right away if things start to go wrong
+- Don't start in production
+- Can learn a lot by running experiment in staging
+
+#### New challenges with Serverless
+- There are no servers that you can access and kill. 
+- There are more inherent chaos and complexity in a serverless architecture.
+- Smaller unit of deployment, but a lot more of them.
+- Every function needs to be correctly configured and secured.
+- A lot of managed, intermediate services, each with its own set of failure modes.
+- Unknown failure modes in the infrastructure we don't control.
+- Often there's little we can do when an outage occurs in the platform.
+
+#### Common weaknesses
+- Improperly tuned timeouts (a caller times out before called service responded)
+- Missing error handling (generic error propagation with HTTP 500 as an example)
+- Missing fallback (how will I react when dynamoDB I am calling is having an outage)
+- Missing regional failover
+
+#### Latency injection with serverless
+**Step 1.** Steady state
+- what metrics do you use
+    - p95
+    - p99
+    - error count
+    - backlog size
+    - yield (percentage of request completed)
+    - harvest (completeness of the returned response)
+
+**Step 2.** Hypothesise steady state will continue in both control group & the experiment group
+
+Serverless considerations:
+- API Gateway integration timeout is 29 seconds
+- Cold start effect - how does it affect your strategy for handling slow responses
+
+**Request timeouts**
+
+Strategy should:
+1. Give requests the best chance to succeed.
+2. Do not allow slow responses to timeout the caller function
+
+Finding the right timeout value is tricky:
+- **too short** - requests not given the best chance to succeed
+- **too long** - risk timing out the calling function
+- It is even more complicated when you have multiple integration points 
+
+Approaches:
+1. Split invocation time equally (e.g. 3 requests, 6s timeout -> 2s timeout per request)
+
+![Equal timeouts distribution](/assets/images/SAC2018/chaos_theory_timeouts_equal_distribution.png)
+
+{:start="2"}
+2. Every request is given nearly all the invocation time (e.g. 3 requests, 6s timeout -> 5s timeout per request)
+
+![Almost all timeout](/assets/images/SAC2018/chaos_theory_timeouts_almost_whole_invocation_time.png)
+
+{:start="3"}
+3. Set timeouts dynamically based on invocation time left
+
+In AWS Lambda
+
+> **Context Object Methods**
+>
+> The context object provides the following methods.
+> 
+>**context.getRemainingTimeInMillis()**
+>
+>Returns the approximate remaining execution time (before timeout occurs) of the Lambda function that is currently executing. The timeout is one of the Lambda function configuration. When the timeout reaches, AWS Lambda terminates your Lambda function.
+>
+>You can use this method to check the remaining time during your function execution and take appropriate corrective action at run time.
+>
+>The general syntax is:
+>
+>```javascript
+>context.getRemainingTimeInMillis();
+>```
+
+![Dynamic allocation - success](/assets/images/SAC2018/chaos_theory_timeouts_dynamic_success.png)
+![Dynamic allocation - failure](/assets/images/SAC2018/chaos_theory_timeouts_dynamic_failure.png)
+
+Recovery steps:
+- Log the timeout with as much context as possible
+  - The API, timeout value, correlation IDs, requests object, etc
+  - Record custom metrics
+- Use fallbacks
+- Be mindful when you sacrifice precision for availability (e.g. your account balance) - User Experience is the king.
+
+**Step 3.** Inject realistic failure
+Where to inject latency?
+
+![Where to inject - sample](/assets/images/SAC2018/chaos_theory_timeouts_latency1.png)
+
+##### **Hypothesis** Function has appropriate timeout on its HTTP communications and can degrade gracefully when these requests are time out.
+![Latency injection](/assets/images/SAC2018/chaos_theory_timeouts_latency2.png)
+
+Should be applied to 3rd party services too (DynamoDB, Twilio, Auth0, ...) 
+![Latency injection - 3rd part](/assets/images/SAC2018/chaos_theory_timeouts_latency3.png)
+
+Be mindful of the blast radius of the experiment - goal is not to break things!
+
+![Latency injection - blast radius](/assets/images/SAC2018/chaos_theory_timeouts_latency4.png)
+
+##### **Hypothesis** All function have appropriate timeout on their HTTP  communication to this internal API, and can degrade gracefully when requests are timed out.
+
+![Latency injection - big imact](/assets/images/SAC2018/chaos_theory_timeouts_latency5.png)
+![Latency injection - big blast radius](/assets/images/SAC2018/chaos_theory_timeouts_latency7.png)
+
+*Use failure injection to programme your colleagues into thinking about failures modes early.*
+
+Make X% of all requests slow in the dev environment.
+
+![Latency injection - big blast radius](/assets/images/SAC2018/chaos_theory_timeouts_latency6.png)
+
+##### **Hypothesis** The client app has appropriate timeout on their HTTP communication with the server, and can degrade gracefully when requests are time out.
+![Latency injection - client](/assets/images/SAC2018/chaos_theory_timeouts_latency8.png)
+![Latency injection - client imact](/assets/images/SAC2018/chaos_theory_timeouts_latency9.png)
+
+**Step 4.** Disprove hypothesis
+How to inject latency?
+- Static weavers (.g. PostSharp, AspectJ)
+- Dynamic Proxies
+- [https://theburningmonk.com/2015/04/design-for-latency-issues/](https://theburningmonk.com/2015/04/design-for-latency-issues/)
+- Manually crafted wrapper libraries
+- factory wrapper functions (think bluebird's *promisifyAll* function)
+
+Code samples from [https://github.com/theburningmonk/lambda-latency-injection-demo](https://github.com/theburningmonk/lambda-latency-injection-demo)
+
+```javascript
+'use strict';
+
+const co      = require('co');
+const Promise = require('bluebird');
+
+let injectLatency = co.wrap(function* (config, segment) {  
+  if (config.isEnabled === true && Math.random() < config.probability) {
+    let delayRange = config.maxDelay - config.minDelay;
+    let delay = Math.floor(config.minDelay + Math.random() * delayRange);
+
+    console.log(`injecting [${delay}ms] latency to HTTP request...`);
+    
+    yield Promise.delay(delay); // <- important bit
+  }
+});
+```
+
+```javascript
+let Req = function* (options) {
+  let request = getRequest(options);
+  let fullResponse = options.resolveWithFullResponse === true;
+
+  let latencyInjectionConfig = options.latencyInjectionConfig;
+  yield injectLatency(latencyInjectionConfig, subsegment); // <- important bit
+
+  try {
+    let resp = yield exec(request);
+    return fullResponse ? resp : resp.body;
+  } catch (e) {
+    if (e.response && e.response.error) {
+      throw e.response.error;
+    }
+    
+    throw e;
+  }
+};
+```
+
+#### Error injection with serverless
+Approach is similar to latency injection. Most common errors are:
+- HTTP 5xx (can be simulated by injecting 5xx responses in http client)
+- DynamoDB provisioned throughput exceeded (can be simulated by injecting the exception in AWSSDK wrapper)
+- Throthled Lambda invocations (can be simulated by setting reserved concurrency limit)
+
+#### Recap
+- failures are **INEVITABLE**
+- the only way to truly know your system’s resilience against failures is to test it through **CONTROLLED** experiments
+- the goal of chaos engineering is **NOT** to actually break production
+- **CONTAINMENT** should be front and centre of your thinking
+- Follow the 4-stepped chaos engineering experiment blueprint
+- there are more inherent chaos and complexity in a serverless application
+- even without servers, you can still inject **CONTROLLED** failures at the application level
 
 
-
-
+Thanks for reading - hopefully you enjoyed it!

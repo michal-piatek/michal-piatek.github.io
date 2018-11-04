@@ -257,6 +257,95 @@ More on the microservices can be found in newly published book by Chris "Microse
 
 ## Serverless
 
+### Introducing Serverless to your organization
+
+Mike Roberts defined Serverless as:
+
+> Serverless = BaaS + FaaS
+
+And three interesting attributes serverless approach has:
+- No concern of managing server machine or processes
+- Automatic and invisible auto-scaling (based on usage)
+- Costs based on precise usage
+
+Mike stated (quite rightly so) that serverless approch let's you trial things really quickly and cheaply - you can be live within hours.
+
+Migration to serverless (from current architectures) would be an iterative approach. There will be **competing** three goals that will be taken into consideration while talking about serverless adoption:
+
+![Goals](/assets/images/SAC2018/serverless_introduction_to_organisations_goals.png)
+
+Mike defined four levels of serverless usage within a project:
+
+|Level|Description|
+|:---:|:---:|
+|Level 1|Serverless Operations|
+|Level 2|Offline Tasks|
+|Level 3|Serverless Activities|
+|Level 4|Serverless Ecosystem|
+
+**Level 1** - e.g. Environment reporting, ChatOps / SlackBots, Deployment automation, Monitoring & Log processing
+
+This level can be categorised as:
+
+![Level 1 goals chart](/assets/images/SAC2018/serverless_introduction_to_organisations_level1.png)
+
+**Level 2** - A cron / jobs box replacement. This level:
+- Introduces FaaS techniques for application development and deployment, while keeping out of real-time logic flow
+- Easy to swap in and out with traditional implementations
+- BUT not useful for learning about high throughput scenarios
+- Serverless is not great for long running batch jobs
+
+This level can be categorised as:
+
+![Level 2 goals chart](/assets/images/SAC2018/serverless_introduction_to_organisations_level2.png)
+
+**Level 3** - real time components of a bigger whole, e.g. message processing lambdas, external service integrations, isolated microservices (without downstream dependencies). This level:
+- Bring Serverless advantages to real-time scenarios
+- Learning how to use Serverless for real-time events
+- Serverless technologies contained to specific areas
+- Not completely safe from scale (e.g. if downstream is not as scalable)
+- Hard to understand full benefits of holistic Serverless ecosystem
+
+This level can be categorised as:
+![Level 3 goals chart](/assets/images/SAC2018/serverless_introduction_to_organisations_level3.png)
+
+**Level 4** This level:
+- Brings use of Serverless right up to UX boundary
+- Full immersion learning
+- Opportunities to use higher level types of learning
+- Understanding what Serverless architecture looks like
+- If things go wrong could easily impact other areas of organization, even **non** Serverless ones
+
+This level can be categorised as:
+![Level 4 goals chart](/assets/images/SAC2018/serverless_introduction_to_organisations_level4.png)
+
+#### Serverless usage
+
+- Website and application
+- Serverless Data Pipeliness
+- Collections of Services   
+
+### Implementing microservices as a serverless application
+
+Nikhil Barthwal gave a comparison between microservices build on top on IaaS (mainly) and Serverless architecture.
+On a high level with serverless:
+- you have less infrastructure to care about, but you have less control
+- real-life examples tend to by a classical microservice and serverless
+
+When we think about compute (FaaS) in serverless:
+- it is asynchronous (event driven)
+- has cold start problems
+- we get a vendor lock in (unless we abstract it out and get lowest common denominator from various cloud providers)
+- security is a different beast (but containers are short lived, which helps with making it more secure)
+- distributed transactions - use Saga pattern
+- resiliency - use circuit breakers, connection pools and BaaS
+- functionality should be fine grained
+    - Functions have resource limits
+    - Functionality should be as small as possible
+    - Continiuous refactoring is needed
+- Function groups should not share Data stores - each fucntion group should have a single BaaS backing it up
+- When doing schema changes a deployment of an entire function group may be needed
+
 ## Event-driven architecture
 
 

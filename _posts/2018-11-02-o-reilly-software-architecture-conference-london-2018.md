@@ -142,7 +142,7 @@ Beware the megalomania syndrome!
 - Pick the wrong tools (20%)
 - Refuse to learn from devs (20%)
 
-**What developers *actually* do**
+**What architects *actually* do**
 - Try to be involved (35%)
 - Act as sales people (30%)
 - Defend architecture (30%)

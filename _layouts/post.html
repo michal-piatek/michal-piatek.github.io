@@ -33,7 +33,11 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-            {{ content }}
+            <details>
+                <summary>Table of content</summary>
+                {% include toc.html html=content %}
+            </details>
+          {{ content }}
         </section>
 
         <aside id="sidebar">

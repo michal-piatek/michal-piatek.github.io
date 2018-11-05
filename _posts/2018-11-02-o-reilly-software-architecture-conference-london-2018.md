@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post 
 excerpt_separator: <!--more-->
 title: O'Reilly Software Architecture Conference - London 2018
 tags: [k8s, architecture, microservices, event-driven, serverless, lambda]
@@ -128,7 +128,7 @@ Symptom: *Believing everything has to be approved by you to ensure it meets the 
 
 Beware the megalomania syndrome!
 
-#### The architect
+### The architect
 
 **What architects want to do?**
 - Shape strategy (30%)
@@ -149,7 +149,7 @@ Beware the megalomania syndrome!
 - Do technical stuff (5%)
 
 
-#### How to cure the above diseases?
+### How to cure the above diseases?
 
 Stefan defined a very broad (and not to be taken literally) success formula.
 

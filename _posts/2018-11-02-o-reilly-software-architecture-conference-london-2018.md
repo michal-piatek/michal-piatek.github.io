@@ -535,7 +535,7 @@ There are four steps to run a chaos experiment:
 3. Inject realistic failures - e.g. server crashes, network error, HD malfunction, etc
 4. Disprove hypothesis - i.e. look for difference in steady state
 
-Chaos experiment in practice:
+#### Chaos experiment in practice
 - Explore unknown unknows away from production
 - Experiments that graduate to production should be carefully considered and planned
 - You should have reasonable confidence in the system before running experiments in production
@@ -546,7 +546,7 @@ Chaos experiment in practice:
 - Address weaknesses before failures happen for real
 - Experiments need to be controlled
 
-Containment:
+#### Containment
 - Ensure everyone knows what you are doing
 - Don't surprise your teammates
 - Run experiments during office hours

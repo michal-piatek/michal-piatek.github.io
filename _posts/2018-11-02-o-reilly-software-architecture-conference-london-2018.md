@@ -255,6 +255,177 @@ Stefan defined a very broad (and not to be taken literally) success formula.
 
 More on the microservices can be found in newly published book by Chris "Microservice Patterns".
 
+### Three types of microservices
+
+Mike Amunndsen quoted Pat Helland: 
+
+> There is no simultaneity on a distance!
+> - Similar to the speed of light bounding information
+> - By the time you see a distant object, it may have changed!
+> - By the time you see a message, the data may have changed!
+> 
+> Services, transactions and locksbound simultaneity!
+> - Inside a transaction, things are simultaneous
+> - Simultaneity exists only inside a transaction!
+> - Simultaneity exists only inside a service!
+
+which is a reflection on delivering microservices, which carries programming the network within it. Mike listed Fallacies of Distributed Systems (authored by Peter Deutsch):
+
+1. The network is reliable.
+2. Latency is zero.
+3. Bandwidth is infinite.
+4. The network is secure. 
+5. Topology doesn't change.
+6. There is one administrator.
+7. Transport cost is zero.
+8. The network is homogeneous.
+
+Which are the things we **should not** assume when building distributed systems. Rick Hickey ([]in his talk](https://www.youtube.com/watch?v=ROor6_NGIWU)) outlined a parallel between Program and System:
+
+|Program|System|
+|:---:|:---:|
+|Application libs|Application as services|
+|Runtime and core libs|Simple Services|
+|Language primitives|Protocols and formats|
+
+#### Microservices
+
+##### Definition
+
+Martin Fowler, 2014:
+> An approach to developing a single application as a suite of small services, each running in its own process and communicating with lightweight mechanisms.
+
+Roy Fielding, 2000:
+> Emphasizes scalability of component interactions, generality of interfaces, independent deployment of components, and intermediary components.
+
+Tim Berners-Lee, 1989:
+> A universal linked information system, in which generality and portability are [most] important.
+
+##### Characteristics
+
+Microservices share a lot of characteristics with Unix Operating Principles (1978):
+
+- Make each program to one thing well
+- Expect the output of every program to be the input of another program
+- Design and build software to be tried early
+- Use tools to lighten the programming task
+
+and can be defined as:
+
+*Loosely-coupled components running in an engineered system.*
+
+##### Types
+
+We can distinguish three types of microservices:
+
+- Stateless
+- Persistence
+- Aggregator
+
+###### Stateless Microservices
+- Simple processors (converters, translators, etc.)
+- No dependence on other microservices
+- No local data storage (disk I/O)
+
+The most common example, but the least useful!
+
+Qualities / considerations of such a microservice:
+- No shared state
+- Easy to replace
+- Easy to scale up
+
+###### Persistence Microservices
+- Simple (local) storage (reads and/or writes)
+- Disk I/O dependent
+- Possibly VM or one-U dependent
+
+Commonly needed, not the easiest to implement.    
+
+Qualities / considerations of such a microservice:
+- System of Record/Source of Truth
+- Relatively easy to scale for reads (CQRS)
+- No cross-service two-phase commits (Saga)
+
+###### Aggregator Microservices
+- Depends on other ("distant") microservices
+- Network dependent
+- Usually Disk I/O dependence, too
+
+The most often-needed; most challenging, too.
+
+Qualities / cosiderations of such a microservice
+- Sequence vs. Parallel calls
+- Timing is everything
+- Easy to scale (should be…)
+
+##### Nygard's Stability Patterns
+
+A quote from Michael Nygard "Bugs will happen. They cannot be eliminated, so they must be survived instead.". Stability patterns that should be considered:
+- Timeout
+- Circuit Breaker
+- Bulkhead
+- Steady State
+- Fail Fast
+- Handshaking
+
+Networked Stateless
+- What if the work takes too long?
+
+Networked Persistence
+- What if the work takes too long?
+- What is the dependent service doesn't respond in time?
+- What if the dependent service is down?
+- What if the storage overflows (data, logs, etc.)?
+
+Networked Aggregators
+- What if the work takes too long?
+- What if a dependent services doesn't respond in time?
+- What if a dependent service is down?
+- What if storage overflows (data, logs, etc.)?
+- What if a dependent service is unhealthy?
+- What if traffic for a service spikes?
+
+Applying Nygard's Patterns to Services
+- Stateless
+    - fail fast
+- Persistence
+    - fail fast, timeout, circuit breaker, steady state
+- Aggregation
+    - fail fast, timeout, circuit breaker, steady state, handshaking, bulkhead
+
+Apply Nygard's Stability Patternsto improve the health of your components and your system.
+
+### Observable Microservices
+
+Maria Gomez started of with listing the princibles of microservices:
+- Modeled around business concepts 
+- Culture of automation 
+- Hide internal implementation details 
+- Decentralize all the things 
+- Deploy independently 
+- Isolate Failure 
+- Highly observable
+
+And defined the observability as:
+
+"**Observability** is the ability to interrogate your system and get accurate answers that improve your understanding of it"
+
+Observability consists of four elements:
+- Logging
+- Monitoring
+- Tracing
+- Visualization and alerting
+
+Monitoring should be accessible by everyone in the team!
+
+Main takeaways from the presentation:
+
+- Structure your data so it can be consumed by other tools
+- Be intentional about things you log, monitor, and alert on
+- Proactively iterate and eliminate noise
+- Evaluate and use existing tools and libraries (OpenTracing, Honeycomb, ioPipe, Datadog, Opsgenie, etc)
+- Service templates to bootstrap microservices over shared libraries. Service mesh if required. 
+
 ## Serverless
 
 ### Introducing Serverless to your organization

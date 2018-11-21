@@ -1,5 +1,5 @@
 ---
-layout: post 
+layout: post_toc 
 excerpt_separator: <!--more-->
 title: O'Reilly Software Architecture Conference - London 2018
 tags: [k8s, architecture, microservices, event-driven, serverless, lambda]
